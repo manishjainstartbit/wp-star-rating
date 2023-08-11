@@ -15,93 +15,93 @@ msgstr ""
 "X-Poedit-Language: English\n"
 "X-Poedit-Country: UNITED STATES\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-SearchPath-0: wp-vivacity-star-rating\n"
+"X-Poedit-SearchPath-0: wp-startbit-star-rating\n"
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:106
+#: wp-startbit-star-rating/startbit-star-rating-options.php:106
 msgid "General Settings"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:107
+#: wp-startbit-star-rating/startbit-star-rating-options.php:107
 msgid "Stars"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:108
+#: wp-startbit-star-rating/startbit-star-rating-options.php:108
 msgid "Save Settings"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:113
+#: wp-startbit-star-rating/startbit-star-rating-options.php:113
 msgid "Enable/Disable"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:121
+#: wp-startbit-star-rating/startbit-star-rating-options.php:121
 msgid "Allow guests to vote"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:129
+#: wp-startbit-star-rating/startbit-star-rating-options.php:129
 msgid "Show vote count"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:137
+#: wp-startbit-star-rating/startbit-star-rating-options.php:137
 msgid "Where to add rating"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:144
+#: wp-startbit-star-rating/startbit-star-rating-options.php:144
 msgid "Position of the Stars"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:155
+#: wp-startbit-star-rating/startbit-star-rating-options.php:155
 msgid "Shape of the Stars"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:165
+#: wp-startbit-star-rating/startbit-star-rating-options.php:165
 msgid "Color of the Stars"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:177
+#: wp-startbit-star-rating/startbit-star-rating-options.php:177
 msgid "Alignment in Respect To Posts"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:188
+#: wp-startbit-star-rating/startbit-star-rating-options.php:188
 msgid "Amount of Stars"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:196
+#: wp-startbit-star-rating/startbit-star-rating-options.php:196
 msgid "Save settings"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:203
+#: wp-startbit-star-rating/startbit-star-rating-options.php:203
 msgid "Live Preview"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:212
+#: wp-startbit-star-rating/startbit-star-rating-options.php:212
 msgid "Reset Votes"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:216
+#: wp-startbit-star-rating/startbit-star-rating-options.php:216
 msgid "You can reset votes by pressing button below."
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:218
+#: wp-startbit-star-rating/startbit-star-rating-options.php:218
 msgid "Reset votes"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:225
+#: wp-startbit-star-rating/startbit-star-rating-options.php:225
 msgid "Feedback Form"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:236
+#: wp-startbit-star-rating/startbit-star-rating-options.php:236
 msgid "Ener Your Email ID"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:238
+#: wp-startbit-star-rating/startbit-star-rating-options.php:238
 msgid "Ener Your Subject"
 msgstr ""
 
-#: wp-vivacity-star-rating/vivacity-star-rating-options.php:240
+#: wp-startbit-star-rating/startbit-star-rating-options.php:240
 msgid "Ener Your Comments"
 msgstr ""
 
-#: wp-vivacity-star-rating/wp-vivacity-star-rating.php:51
-msgid "WP Vivacity Star Rating"
+#: wp-startbit-star-rating/wp-startbit-star-rating.php:51
+msgid "WP Star Rating"
 msgstr ""
 
