@@ -1,5 +1,6 @@
 var $j = jQuery,
     pcl, rating_working, numb;
+    
 $j(document).ready(function() {
 	//alert(wpvisr_script_ajax_object.rating_working);
     $j("#wpvisr_container_" + wpvisr_script_ajax_object.post_id).children("#wpvisr_shapes").children(".wpvisr_rating_piece").mouseenter(function(e) {
@@ -11,7 +12,7 @@ $j(document).ready(function() {
             for (var t = 1; t <= wpvisr_script_ajax_object.scale; t++) $j("#wpvisr_piece_" + t).addClass("wpvisr_" + wpvisr_script_ajax_object.wpvisr_type + "_empty");
             for ($j("#wpvisr_container_" + wpvisr_script_ajax_object.post_id).children("#wpvisr_shapes").children(".wpvisr_rating_piece").removeClass("wpvisr_" + wpvisr_script_ajax_object.wpvisr_type + "_full_voting"),$j("#wpvisr_container_" + wpvisr_script_ajax_object.post_id).children("#wpvisr_shapes").children(".wpvisr_rating_piece").removeClass("wpvisr_" + wpvisr_script_ajax_object.wpvisr_type + "_half_voting"), t = 1; numb >= t; t++) 
             $j("#wpvisr_piece_" + t).addClass("wpvisr_" + wpvisr_script_ajax_object.wpvisr_type + "_full_voted")
-        }
+        } 
     }).mouseleave(function() {
         if (rating_working) {
             $j("#wpvisr_container_" + wpvisr_script_ajax_object.post_id).children("#wpvisr_shapes").children(".wpvisr_rating_piece").removeClass("wpvisr_" + wpvisr_script_ajax_object.wpvisr_type + "_full_voted"), $j("#wpvisr_container_" + wpvisr_script_ajax_object.post_id).children("#wpvisr_shapes").children(".wpvisr_rating_piece").removeClass("wpvisr_" + wpvisr_script_ajax_object.wpvisr_type + "_half_voted");

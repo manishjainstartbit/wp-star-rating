@@ -6,7 +6,7 @@
   Author: Startbit IT Solutions Pvt. Ltd.
   Author URI: https://startbitsolutions.com/
   Author Email: support@startbitsolutions.com
-  Text Domain: wp-vivacity-star-rating
+  Text Domain: wp-star-rating
   Domain Path: /languages/
  */
  
@@ -29,6 +29,7 @@ Copyright 2023  Startbit IT Solutions Pvt. Ltd.  (email : support@startbitsoluti
 function wpvisr_activation()
 {
     global $wpdb;
+    $def_types;
     $query="CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."wpvisr_votes`  (
 	`post_id` INT(11) NULL DEFAULT NULL,
 	`user_id` TINYTEXT NULL COLLATE 'utf8_unicode_ci',
@@ -65,20 +66,20 @@ add_action('admin_menu', 'wpvisr_menu');
 
 function wpvisr_menu()
 {
-    add_menu_page( __('WP Vivacity Star Rating', 'wp-vivacity-star-rating') , 'WP Vivacity Star Rating', 'manage_options', 'wpvisr_options', 'wpvisr_options_page',plugin_dir_url( __FILE__ ) . 'images/star-image.png');
+    add_menu_page( __('WP Star Rating', 'wp-star-rating') , 'WP Star Rating', 'manage_options', 'wpvisr_options', 'wpvisr_options_page',plugin_dir_url( __FILE__ ) . 'images/star-image.png');
 }
 
 /*Including the Theme Options File*/
 function wpvisr_options_page()
 {
-    require_once (plugin_dir_path(__FILE__).'/vivacity-star-rating-options.php');
+    require_once (plugin_dir_path(__FILE__).'/wp-star-rating-options.php');
 }
 
 /*Function For Language Translation*/
 function wpvisr_action_init()
 {
 // Localization
-load_plugin_textdomain('wp-vivacity-star-rating', false, dirname(plugin_basename(__FILE__)). '/languages');
+load_plugin_textdomain('wp-star-rating', false, dirname(plugin_basename(__FILE__)). '/languages');
 }
 
 // Add actions
@@ -107,6 +108,7 @@ if($theme_options['activated']==1)
 
 function wpvisr_content_filter($content)
 {
+
 	 $options=wpvisr_options();
 	 //print_r($options);
     $list=wpvisr_get_post_type();
@@ -359,6 +361,7 @@ function wpvisr_get_post_types_for()
 
 /*Function To save the Plugin Options*/
 function wpvisr_save_options() {
+    $def_types = 0;
 $theme_options = wpvisr_options();
 $current_json = json_encode($theme_options);
 	//echo "<pre>";
@@ -528,7 +531,7 @@ $current_json = json_encode($theme_options);
               
         /*Where Do we want to show stars*/
 			$post_lists=wpvisr_get_post_type();         
-         //print_r($post_lists);
+        // print_r($post_lists);
         	foreach($post_lists as $post_list)
         		{	
         			$deftypes[$post_list]=0;
@@ -542,9 +545,10 @@ $current_json = json_encode($theme_options);
         				}
         		} 
         		
-        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "alignment"=>"center", "allow_guest_vote"=>"0");
-        
+        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$deftypes, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "alignment"=>"center", "allow_guest_vote"=>"0");
+       
         $diff=array_diff_key($default_options, $options);
+       // print_r($options);
     
         if (count($diff)>0)
         {
@@ -743,7 +747,7 @@ add_action('wp_ajax_nopriv_wpvisr_star_rating', 'wpvisr_star_rating');
     $wpdb->query($query);
     $query="TRUNCATE TABLE `".$wpdb->prefix."wpvisr_rating`;";
     $wpdb->query($query);
-    echo "<div class='updated'><p><?php _e('All votes were cleared.','wp-vivacity-star-rating');?></p></div>";
+    echo "<div class='updated'><p><?php _e('All votes were cleared.','wp-star-rating');?></p></div>";
  }
 
 /*Function For Adding Custom Dashboard Icon*/
