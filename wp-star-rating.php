@@ -103,15 +103,15 @@ $theme_options = wpvisr_options();
 //print_r($theme_options);
 if($theme_options['activated']==1)
 {
+    //print_r('expression');
 	add_filter('the_content','wpvisr_content_filter',15);
 }
 
 function wpvisr_content_filter($content)
 {
-
-	 $options=wpvisr_options();
+	 $options = wpvisr_options();
 	 //print_r($options);
-    $list=wpvisr_get_post_type();
+    $list = wpvisr_get_post_type();
     global $post, $wpdb;
     $disable_rating = get_post_meta($post->ID, '_wpvisr_disable', true);
     
@@ -121,15 +121,17 @@ function wpvisr_content_filter($content)
         {
 				if ($options['position']=='before')
             {
-                $content=wpvisr_rating().$content;
+                $content = wpvisr_rating().$post->post_content;
             }
             elseif ($options['position']=='after')
             {
+                $content = $post->post_content;
                 $content .= wpvisr_rating();
             }
             break;
         }
     }
+   
     return $content;
 }
 
@@ -157,13 +159,14 @@ function wpvisr_rating()
         $voted=$wpdb->get_results($query, ARRAY_N);
         if (count($voted)>0)
         {
-            $results='<div id="wpvisr_container"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
+            $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
             wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>'false', 'post_id'=>$post->ID));
             return $results;
         }
         else
         {
-            $results='<div id="wpvisr_container"><div class="wpvisr_visual_container" id="wpvisr_container_'.$post->ID.'">'.wpvisr_show_voting($votes, $points, $options['show_vote_count']).'</div></div>';
+            //print_r($post->post_content);
+            $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container" id="wpvisr_container_'.$post->ID.'">'.wpvisr_show_voting($votes, $points, $options['show_vote_count']).'</div></div>';
             wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>'false', 'post_id'=>$post->ID));
             return $results;
         }
@@ -174,13 +177,13 @@ function wpvisr_rating()
         $voted=$wpdb->get_results($query, ARRAY_N);
         if (count($voted)>0)
         {
-            $results='<div id="wpvisr_container"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
+            $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
             wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>'false', 'post_id'=>$post->ID));
             return $results;
         }
         else
         {
-            $results='<div id="wpvisr_container"><div class="wpvisr_visual_container" id="wpvisr_container_'.$post->ID.'">'.wpvisr_show_voting($votes, $points, $options['show_vote_count']).'</div></div>';
+            $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container" id="wpvisr_container_'.$post->ID.'">'.wpvisr_show_voting($votes, $points, $options['show_vote_count']).'</div></div>';
             wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>'false', 'post_id'=>$post->ID));
             return $results;
         }
@@ -188,7 +191,7 @@ function wpvisr_rating()
     else
     {
         wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>false, 'post_id'=>$post->ID));
-        $results='<div id="wpvisr_container"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
+        $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
         return $results;
     }
 }

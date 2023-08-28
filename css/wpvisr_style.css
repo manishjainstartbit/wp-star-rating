@@ -19,7 +19,7 @@
 #wpvisr_container {
     text-align: center;
     line-height: 17px;
-    margin: 5px 0;
+    margin: 5px auto;
 }
 .wpvisr_visual_container {
     height: 17px;
