@@ -129,8 +129,10 @@ function wpvisr_content_filter($content)
                 $content .= wpvisr_rating();
             }
             break;
+        } else {
+            $content = $post->post_content;
         }
-    }
+    } 
    
     return $content;
 }
@@ -198,7 +200,7 @@ function wpvisr_rating()
 
 /*Adding Rating Enable Option In Post Edit Screen*/
 
-add_action('post_submitbox_misc_actions', 'add_disable_wpvisr_checkbox');
+/* add_action('post_submitbox_misc_actions', 'add_disable_wpvisr_checkbox', 99);
 function add_disable_wpvisr_checkbox()
 {
     global $post;
@@ -207,7 +209,7 @@ function add_disable_wpvisr_checkbox()
     ?>
     <div class="misc-pub-section">
         <input id="wpvisr_disable_rating" type="checkbox" name="wpvisr_disable_rating"  value="<?php echo $disable_rating; ?>" <?php checked($disable_rating, 1, true); ?>>
-        <label for="wpvisr_enable_rating">Disable Rating For This Entry </label></div>
+        <label for="wpvisr_disable_rating">Disable Rating For This Entry </label></div>
     <?php
 }
 
@@ -225,7 +227,52 @@ function wpvisr_filter_handler($data, $postarr)
         delete_post_meta($postarr['ID'], '_wpvisr_disable');
     }
     return $data;
+} */
+
+
+function add_disable_rating_metabox() {
+    global $post;
+    $type = get_post_type($post->ID);
+    add_meta_box(
+        'disable-rating-metabox',
+        'Disable Rating',
+        'render_disable_rating_metabox',
+        $type, // You can change this to 'page' if you want the metabox on pages
+        'side',
+        'default'
+    );
 }
+
+function render_disable_rating_metabox($post) {
+    $disable_rating = get_post_meta($post->ID, '_wpvisr_disable', true);
+    wp_nonce_field('disable_rating_nonce', 'disable_rating_nonce');
+    ?>
+    <label for="wpvisr_disable_rating">
+        <input type="checkbox" id="wpvisr_disable_rating" name="wpvisr_disable_rating" value="1" <?php checked($disable_rating, 1); ?>>
+        Disable Rating For This Entry
+    </label>
+    <?php
+}
+
+add_action('add_meta_boxes', 'add_disable_rating_metabox');
+
+function save_disable_rating_checkbox($post_id) {
+    if (!isset($_POST['disable_rating_nonce']) || !wp_verify_nonce($_POST['disable_rating_nonce'], 'disable_rating_nonce')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (isset($_POST['wpvisr_disable_rating'])) {
+        update_post_meta($post_id, '_wpvisr_disable', 1);
+    } else {
+        delete_post_meta($post_id, '_wpvisr_disable');
+    }
+}
+
+add_action('save_post', 'save_disable_rating_checkbox');
 
 
 function wpvisr_show_voted($votes, $points, $show_vc){
