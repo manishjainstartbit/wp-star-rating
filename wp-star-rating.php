@@ -94,20 +94,35 @@ add_action('wp_enqueue_scripts', 'wpvisr_script_file_1');
  
 function wpvisr_script_file_2() 
 {
-	wp_enqueue_script('wpvisr_script', plugins_url('/js/wpvisr_script.js', __FILE__), array('jquery'), NULL);
+    global $post;
+	wp_enqueue_script('wpvisr_script', plugins_url('/js/wpvisr_script.js', __FILE__), array('jquery'), true);
+    $options=wpvisr_options();
+    $localization_data = array(
+        'ajax_url' => esc_url(admin_url('admin-ajax.php')),
+        'scale' => esc_attr($options['scale']),
+        'wpvisr_type' => esc_attr($options['color'] . $options['shape']),
+        'rating_working' => 'false', // Consider setting a dynamic value here
+        'post_id' => esc_attr($post->ID),
+    );
+
+    wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', $localization_data);
 } 
-add_filter('the_content', 'wpvisr_script_file_2');
+add_action('wp_enqueue_scripts', 'wpvisr_script_file_2');
+
 
 /*Code for filtering post content for adding Stars Rating*/
 $theme_options = wpvisr_options();
+//print_r($theme_options);
 if($theme_options['activated']==1)
 {
+	//print_r('expression');
 	add_filter('the_content','wpvisr_content_filter',15);
 }
 
 function wpvisr_content_filter($content)
 {
 	 $options = wpvisr_options();
+//print_r($options);
     $list = wpvisr_get_post_type();
     global $post, $wpdb;
     $disable_rating = get_post_meta($post->ID, '_wpvisr_disable', true);
@@ -152,22 +167,37 @@ function wpvisr_rating()
    
     $options=wpvisr_options();
    
-    if (is_user_logged_in()==1)
-    {
-        $query="select * from `".$wpdb->prefix."wpvisr_votes` where `post_id`='$post->ID' and `user_id`='$current_user->ID';";
-        $voted=$wpdb->get_results($query, ARRAY_N);
-        if (count($voted)>0)
-        {
-            $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container">'.wpvisr_show_voted($votes, $points, $options['show_vote_count']).'</div></div>';
-            wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>'false', 'post_id'=>$post->ID));
-            return $results;
+    if (is_user_logged_in()) {
+        global $wpdb, $post, $current_user;
+    
+        // Use $wpdb->prepare for SQL queries to prevent SQL injection
+        $query = $wpdb->prepare(
+            "SELECT * FROM `{$wpdb->prefix}wpvisr_votes` WHERE `post_id` = %d AND `user_id` = %d;",
+            $post->ID,
+            $current_user->ID
+        );
+    
+        // Get results and handle errors
+        $voted = $wpdb->get_results($query, ARRAY_N);
+    
+        if (count($voted) > 0) {
+            $results = '<div id="wpvisr_container" style="text-align:' . esc_attr($options["alignment"]) . '"><div class="wpvisr_visual_container">' . wpvisr_show_voted($votes, $points, $options['show_vote_count']) . '</div></div>';
+        } else {
+            $results = '<div id="wpvisr_container" style="text-align:' . esc_attr($options["alignment"]) . '"><div class="wpvisr_visual_container" id="wpvisr_container_' . esc_attr($post->ID) . '">' . wpvisr_show_voting($votes, $points, $options['show_vote_count']) . '</div></div>';
         }
-        else
-        {
-            $results='<div id="wpvisr_container" style="text-align:'.$options["alignment"].'"><div class="wpvisr_visual_container" id="wpvisr_container_'.$post->ID.'">'.wpvisr_show_voting($votes, $points, $options['show_vote_count']).'</div></div>';
-            wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', array('ajax_url'=>admin_url('admin-ajax.php'), 'scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape'], 'rating_working'=>'false', 'post_id'=>$post->ID));
-            return $results;
-        }
+    
+        // Localize the script based on conditions
+        $localization_data = array(
+            'ajax_url' => esc_url(admin_url('admin-ajax.php')),
+            'scale' => esc_attr($options['scale']),
+            'wpvisr_type' => esc_attr($options['color'] . $options['shape']),
+            'rating_working' => 'false', // Consider setting a dynamic value here
+            'post_id' => esc_attr($post->ID),
+        );
+    
+        wp_localize_script('wpvisr_script', 'wpvisr_script_ajax_object', $localization_data);
+    
+        return $results;
     }
     else if ($options['allow_guest_vote']&&filter_var(wpvisr_get_user_ip(), FILTER_VALIDATE_IP))
     {
@@ -195,6 +225,36 @@ function wpvisr_rating()
 }
 
 /*Adding Rating Enable Option In Post Edit Screen*/
+
+/* add_action('post_submitbox_misc_actions', 'add_disable_wpvisr_checkbox', 99);
+function add_disable_wpvisr_checkbox()
+{
+    global $post;
+    $type=get_post_type($post->ID);
+    $disable_rating=get_post_meta($post->ID, '_wpvisr_disable', true);
+    ?>
+    <div class="misc-pub-section">
+        <input id="wpvisr_disable_rating" type="checkbox" name="wpvisr_disable_rating"  value="<?php echo $disable_rating; ?>" <?php checked($disable_rating, 1, true); ?>>
+        <label for="wpvisr_disable_rating">Disable Rating For This Entry </label></div>
+    <?php
+}
+
+add_filter('wp_insert_post_data', 'wpvisr_filter_handler', '99', 2);
+
+function wpvisr_filter_handler($data, $postarr)
+{
+
+    if (isset($_POST['wpvisr_disable_rating']))
+    {
+        update_post_meta($postarr['ID'], '_wpvisr_disable', '1');
+    }
+    else
+    {
+        delete_post_meta($postarr['ID'], '_wpvisr_disable');
+    }
+    return $data;
+} */
+
 
 function add_disable_rating_metabox() {
     global $post;
@@ -284,6 +344,7 @@ function wpvisr_show_voting($votes, $points, $show_vc){
 			
 	 $options=wpvisr_options();
     $wpvisr_type=$options['color'].$options['shape'];
+//print_r($wpvisr_type);
     if ($votes>0)
     {
         $rate=$points/$votes;
@@ -311,6 +372,7 @@ function wpvisr_show_voting($votes, $points, $show_vc){
         $html .= '<span id="wpvisr_piece_'.$i.'" class="wpvisr_rating_piece '.$class.'"></span> ';
     }
     $html.='</div>';
+//echo $show_vc; 
     if ($show_vc)
     {
         $html .= '<span id="wpvisr_votes">'.$votes.' Votes</span>';
@@ -355,6 +417,7 @@ function wpvisr_get_post_type()
     {
         $types[]=$post_type->rewrite['slug'];
     }
+//print_r($types);
     return $types;
 }
 
@@ -377,6 +440,7 @@ function wpvisr_save_options() {
     $def_types = 0;
 $theme_options = wpvisr_options();
 $current_json = json_encode($theme_options);
+//echo "<pre>";
 	if (isset($_POST['wpvisr_shape'])||isset($_POST['wpvisr_color'])||isset($_POST['wpvisr_position'])||isset($_POST['wpvisr_alignment'])||isset($_POST['wpvisr_show_vote_count'])||isset($_POST['wpvisr_activated'])||isset($_POST['wpvisr_allow_guest_vote'])||isset($_POST['scale']))
     	{
 			if(isset($_POST['wpvisr_shape']))
@@ -543,6 +607,7 @@ $current_json = json_encode($theme_options);
               
         /*Where Do we want to show stars*/
 			$post_lists=wpvisr_get_post_type();         
+// print_r($post_lists);
         	foreach($post_lists as $post_list)
         		{	
         			$deftypes[$post_list]=0;
@@ -559,6 +624,7 @@ $current_json = json_encode($theme_options);
         $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$deftypes, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "alignment"=>"center", "allow_guest_vote"=>"0");
        
         $diff=array_diff_key($default_options, $options);
+// print_r($options);
     
         if (count($diff)>0)
         {
