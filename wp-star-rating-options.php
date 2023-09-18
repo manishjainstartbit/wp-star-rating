@@ -99,7 +99,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
   <ul>
    <li><a href="#tabs-1"><?php _e('General Settings','wp-star-rating');?></a></li>
 	<li><a href="#tabs-2"><?php _e('Stars','wp-star-rating');?></a></li>
-	<li><a href="#tabs-3" class="button button-primary button-large"><?php _e('Save Settings','wp-star-rating');?></a></li>
+	<!-- <li><a href="#tabs-3" class="button button-primary button-large"><?php _e('Save Settings','wp-star-rating');?></a></li> -->
   </ul>
   <div id="tabs-1">
 	<div class="tab_box">
@@ -143,6 +143,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
            </select>
       </p>		
 		</div>
+        <p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-star-rating');?>"></p>
   </div>
   <div id="tabs-2">
 	<div class="tab_box"> 
@@ -185,10 +186,12 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
                 
             	<div class="wpvisr_hint tooltip-right" data-tooltip="Allowed Values are 3-10"></div>
             </div>
+
+            <p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-star-rating');?>"></p>
   </div>
-  <div id="tabs-3">
+  <!-- <div id="tabs-3">
 	<p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-star-rating');?>"></p>
-  </div>
+  </div> -->
 </div>
 </form> 
 <div id="postbox-container-1" class="postbox-container" style="float: right;display:inline-block;width: 280px;margin-right:20px;">

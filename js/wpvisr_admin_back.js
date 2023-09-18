@@ -32,6 +32,25 @@ function initiate()
     
     $j(function() {
     $j( "#tabs" ).tabs();
+    //console.log($j( "#tabs" ).tabs());
+
+    // Function to load the previously active tab from localStorage
+    function loadPreviousTab() {
+        const previousTab = localStorage.getItem('activeTab');
+        if (previousTab) {
+            const index = $j('#tabs ul li a[href="' + previousTab + '"]').parent().index();
+            $j("#tabs").tabs("option", "active", index);
+        }
+    }
+
+    // Store the active tab in localStorage when a tab is activated
+    $j("#tabs").on("tabsactivate", function(event, ui) {
+        const activeTab = ui.newPanel.attr("id");
+        localStorage.setItem('activeTab', '#' + activeTab);
+    });
+
+    // Load the previously active tab when the page loads
+    loadPreviousTab();
   });
 	 
 $j("#wpvisr_shape").change(function(event)
