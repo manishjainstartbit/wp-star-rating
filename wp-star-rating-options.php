@@ -85,8 +85,6 @@ if (isset($_POST['wpvisr_feedback_form'])){
 		$body .='The activated plugins are: '.$actived_plugin.'';
 		$body .= '</body></html>';
 		wp_mail($to,$subject,$body,$header);
-//echo "<pre>";
-		//print_r($body);
 		$success="Thanks For Submitting Review. We will contact you Soon.";
 }
 wpvisr_save_options();

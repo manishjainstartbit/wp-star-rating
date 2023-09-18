@@ -26,6 +26,8 @@ Copyright 2023  Startbit IT Solutions Pvt. Ltd.  (email : support@startbitsoluti
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+/* function for plugin activation  */
 function wpvisr_activation()
 {
     global $wpdb;
@@ -84,11 +86,10 @@ load_plugin_textdomain('wp-star-rating', false, dirname(plugin_basename(__FILE__
 
 // Add actions
 add_action('init', 'wpvisr_action_init');
-// Add Files 
 function wpvisr_script_file_1() 
 {
 	wp_enqueue_script('jquery');
-   wp_enqueue_style('wpvisr_style', plugins_url('/css/wpvisr_style.css', __FILE__));
+    wp_enqueue_style('wpvisr_style', plugins_url('/css/wpvisr_style.css', __FILE__));
 }
 add_action('wp_enqueue_scripts', 'wpvisr_script_file_1');
  
@@ -112,17 +113,14 @@ add_action('wp_enqueue_scripts', 'wpvisr_script_file_2');
 
 /*Code for filtering post content for adding Stars Rating*/
 $theme_options = wpvisr_options();
-//print_r($theme_options);
 if($theme_options['activated']==1)
 {
-	//print_r('expression');
 	add_filter('the_content','wpvisr_content_filter',15);
 }
-
+/* function to display post content with rating */
 function wpvisr_content_filter($content)
 {
 	 $options = wpvisr_options();
-//print_r($options);
     $list = wpvisr_get_post_type();
     global $post, $wpdb;
     $disable_rating = get_post_meta($post->ID, '_wpvisr_disable', true);
@@ -224,38 +222,6 @@ function wpvisr_rating()
     }
 }
 
-/*Adding Rating Enable Option In Post Edit Screen*/
-
-/* add_action('post_submitbox_misc_actions', 'add_disable_wpvisr_checkbox', 99);
-function add_disable_wpvisr_checkbox()
-{
-    global $post;
-    $type=get_post_type($post->ID);
-    $disable_rating=get_post_meta($post->ID, '_wpvisr_disable', true);
-    ?>
-    <div class="misc-pub-section">
-        <input id="wpvisr_disable_rating" type="checkbox" name="wpvisr_disable_rating"  value="<?php echo $disable_rating; ?>" <?php checked($disable_rating, 1, true); ?>>
-        <label for="wpvisr_disable_rating">Disable Rating For This Entry </label></div>
-    <?php
-}
-
-add_filter('wp_insert_post_data', 'wpvisr_filter_handler', '99', 2);
-
-function wpvisr_filter_handler($data, $postarr)
-{
-
-    if (isset($_POST['wpvisr_disable_rating']))
-    {
-        update_post_meta($postarr['ID'], '_wpvisr_disable', '1');
-    }
-    else
-    {
-        delete_post_meta($postarr['ID'], '_wpvisr_disable');
-    }
-    return $data;
-} */
-
-
 function add_disable_rating_metabox() {
     global $post;
     $type = get_post_type($post->ID);
@@ -339,12 +305,11 @@ function wpvisr_show_voted($votes, $points, $show_vc){
     return $html;
 		
 }
-
+/* function to display voting */
 function wpvisr_show_voting($votes, $points, $show_vc){
 			
 	 $options=wpvisr_options();
     $wpvisr_type=$options['color'].$options['shape'];
-//print_r($wpvisr_type);
     if ($votes>0)
     {
         $rate=$points/$votes;
@@ -372,7 +337,6 @@ function wpvisr_show_voting($votes, $points, $show_vc){
         $html .= '<span id="wpvisr_piece_'.$i.'" class="wpvisr_rating_piece '.$class.'"></span> ';
     }
     $html.='</div>';
-//echo $show_vc; 
     if ($show_vc)
     {
         $html .= '<span id="wpvisr_votes">'.$votes.' Votes</span>';
@@ -417,7 +381,6 @@ function wpvisr_get_post_type()
     {
         $types[]=$post_type->rewrite['slug'];
     }
-//print_r($types);
     return $types;
 }
 
@@ -440,7 +403,6 @@ function wpvisr_save_options() {
     $def_types = 0;
 $theme_options = wpvisr_options();
 $current_json = json_encode($theme_options);
-//echo "<pre>";
 	if (isset($_POST['wpvisr_shape'])||isset($_POST['wpvisr_color'])||isset($_POST['wpvisr_position'])||isset($_POST['wpvisr_alignment'])||isset($_POST['wpvisr_show_vote_count'])||isset($_POST['wpvisr_activated'])||isset($_POST['wpvisr_allow_guest_vote'])||isset($_POST['scale']))
     	{
 			if(isset($_POST['wpvisr_shape']))
@@ -607,7 +569,6 @@ $current_json = json_encode($theme_options);
               
         /*Where Do we want to show stars*/
 			$post_lists=wpvisr_get_post_type();         
-// print_r($post_lists);
         	foreach($post_lists as $post_list)
         		{	
         			$deftypes[$post_list]=0;
@@ -624,7 +585,6 @@ $current_json = json_encode($theme_options);
         $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$deftypes, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "alignment"=>"center", "allow_guest_vote"=>"0");
        
         $diff=array_diff_key($default_options, $options);
-// print_r($options);
     
         if (count($diff)>0)
         {
