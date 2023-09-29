@@ -95,7 +95,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
 ?>
 <h1>WP Star Rating Option</h1>
  <form name="form" method="POST" action="" style="margin-top:15px;">
-<div id="tabs">
+<div id="tabs" class="wpsr-tabs">
   <ul>
    <li><a href="#tabs-1"><?php _e('General Settings','wp-star-rating');?></a></li>
 	<li><a href="#tabs-2"><?php _e('Stars','wp-star-rating');?></a></li>

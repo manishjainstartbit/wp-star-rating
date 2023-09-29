@@ -605,4 +605,13 @@
   #ui-id-3 {
     color: #fff;
   }
+  .wpsr-tabs .ui-tabs-tab.ui-state-active {
+    background: #2271b1;
+}
+.wpsr-tabs .ui-state-active a {
+    color: #fff;
+}
+.wpsr-tabs .ui-tabs-tab {
+    background: #fff;
+}
 
