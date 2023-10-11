@@ -93,8 +93,10 @@ $options=wpvisr_options();
 wp_enqueue_script('wpvisr_admin_back', plugins_url('/js/wpvisr_admin_back.js', __FILE__), array('jquery'), NULL);
 wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape']));
 ?>
+<div class="wrap">
 <h1>WP Star Rating Option</h1>
- <form name="form" method="POST" action="" style="margin-top:15px;">
+</div>
+<form name="form" method="POST" action="" style="margin-top:15px;">
 <div id="tabs" class="wpsr-tabs">
   <ul>
    <li><a href="#tabs-1"><?php _e('General Settings','wp-star-rating');?></a></li>
