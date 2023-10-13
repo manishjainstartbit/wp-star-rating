@@ -140,7 +140,7 @@ function wpvisr_content_filter($content)
             }
             break;
         } else {
-            $content = $post->post_content;
+            //$content = $post->post_content;
         }
     } 
    
@@ -246,7 +246,7 @@ function render_disable_rating_metabox($post) {
     <?php
 }
 
-add_action('add_meta_boxes', 'add_disable_rating_metabox');
+//add_action('add_meta_boxes', 'add_disable_rating_metabox');
 
 function save_disable_rating_checkbox($post_id) {
     if (!isset($_POST['disable_rating_nonce']) || !wp_verify_nonce($_POST['disable_rating_nonce'], 'disable_rating_nonce')) {
@@ -375,12 +375,18 @@ function wpvisr_options()
 /*Function To Get the Post Type*/
 function wpvisr_get_post_type()
 {
-    $types=array("post", "page");
+    $types = array("post", "page");
     $post_types=get_post_types(array('public'=>true, '_builtin'=>false), 'objects', 'and');
-    foreach ($post_types as $post_type)
-    {
-        $types[]=$post_type->rewrite['slug'];
+
+    foreach ($post_types as $post_type) {
+        if (post_type_supports($post_type->name, 'editor')) {
+            // Check if 'rewrite' is set and is an array
+            if (isset($post_type->rewrite['slug']) && is_array($post_type->rewrite)) {
+                $types[] = $post_type->rewrite['slug'];
+            }
+        }
     }
+
     return $types;
 }
 
@@ -388,15 +394,27 @@ function wpvisr_get_post_type()
 function wpvisr_get_post_types_for()
 {
     $options = wpvisr_options();
-    $post_types=get_post_types(array('public'=>true, '_builtin'=>false), 'objects', 'and');
-    $result='<table><tr><td class="wpvisr_cb_labels">Posts</td><td><input type="checkbox" name="post" id="post" value="'.$options['where_to_show']['post'].'" '.checked($options['where_to_show']['post'], 1, false).'></td></tr><tr><td class="wpvisr_cb_labels">Pages</td><td><input type="checkbox" name="page" id="page" value="'.$options['where_to_show']['page'].'" '.checked($options['where_to_show']['page'], 1, false).'></td></tr>';
-    foreach ($post_types as $post_type)
-    {
-        $result.= '<tr><td class="wpvisr_cb_labels">'.$post_type->labels->name.'</td><td><input type="checkbox" name="'.$post_type->rewrite['slug'].'" id="'.$post_type->rewrite['slug'].'" value="'.$options['where_to_show'][$post_type->rewrite['slug']].'" '.checked($options['where_to_show'][$post_type->rewrite['slug']], 1, false).'></td></tr>';
+    $post_types = get_post_types(array('public' => true, '_builtin' => false), 'objects', 'and');
+    $result = '<table><tr><td class="wpvisr_cb_labels">Posts</td><td><input type="checkbox" name="post" id="post" value="' . $options['where_to_show']['post'] . '" ' . checked($options['where_to_show']['post'], 1, false) . '></td></tr><tr><td class="wpvisr_cb_labels">Pages</td><td><input type="checkbox" name="page" id="page" value="' . $options['where_to_show']['page'] . '" ' . checked($options['where_to_show']['page'], 1, false) . '></td></tr>';
+
+    foreach ($post_types as $post_type) {
+        $slug = isset($post_type->rewrite['slug']) ? $post_type->rewrite['slug'] : '';
+
+        if (!empty($slug)) {
+            // Check if the key exists in $options['where_to_show']
+            $value = isset($options['where_to_show'][$slug]) ? $options['where_to_show'][$slug] : 0;
+
+            $result .= '<tr><td class="wpvisr_cb_labels">' . $post_type->labels->name . '</td><td><input type="checkbox" name="' . $slug . '" id="' . $slug . '" value="' . $value . '" ' . checked($value, 1, false) . '></td></tr>';
+        } else {
+            // Debugging: Output information when 'slug' is empty
+            error_log('Empty slug for post type: ' . $post_type->name);
+        }
     }
-    $result.="</table>";
+
+    $result .= "</table>";
     return $result;
 }
+
 
 /*Function To save the Plugin Options*/
 function wpvisr_save_options() {
