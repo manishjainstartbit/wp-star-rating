@@ -614,4 +614,11 @@
 .wpsr-tabs .ui-tabs-tab {
     background: #fff;
 }
-
+#feedback_form label {
+    display: block !important;
+    margin-bottom: -10px !important;
+    margin-top: 10px !important;
+}
+input.wpvisr_button.button.button-primary.button-small.feedback {
+    display: block;
+}
