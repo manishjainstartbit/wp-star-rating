@@ -19,7 +19,7 @@
 #wpvisr_container {
     text-align: center;
     line-height: 17px;
-    margin: 5px 0;
+    margin: 5px auto;
 }
 .wpvisr_visual_container {
     height: 17px;
@@ -600,7 +600,25 @@
 }
 .wpvisr_hint {
      float:  left;
-     margin-left: 30px;
      margin-top: 20px;
   }
-
+  #ui-id-3 {
+    color: #fff;
+  }
+  .wpsr-tabs .ui-tabs-tab.ui-state-active {
+    background: #2271b1;
+}
+.wpsr-tabs .ui-state-active a {
+    color: #fff;
+}
+.wpsr-tabs .ui-tabs-tab {
+    background: #fff;
+}
+#feedback_form label {
+    display: block !important;
+    margin-bottom: -10px !important;
+    margin-top: 10px !important;
+}
+input.wpvisr_button.button.button-primary.button-small.feedback {
+    display: block;
+}

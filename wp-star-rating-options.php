@@ -7,7 +7,7 @@ if (isset($_POST['wpvisr_reset_votes']))
 	}
 	
 }
-
+global $success;
 if (isset($_POST['wpvisr_feedback_form'])){
 	
 	
@@ -15,7 +15,7 @@ if (isset($_POST['wpvisr_feedback_form'])){
 		{
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		global $success;
+		
 		$all_plugins = get_plugins();
 		foreach($all_plugins as $plugin)
 		{
@@ -85,8 +85,6 @@ if (isset($_POST['wpvisr_feedback_form'])){
 		$body .='The activated plugins are: '.$actived_plugin.'';
 		$body .= '</body></html>';
 		wp_mail($to,$subject,$body,$header);
-		//echo "<pre>";
-		//print_r($body);
 		$success="Thanks For Submitting Review. We will contact you Soon.";
 }
 wpvisr_save_options();
@@ -95,18 +93,20 @@ $options=wpvisr_options();
 wp_enqueue_script('wpvisr_admin_back', plugins_url('/js/wpvisr_admin_back.js', __FILE__), array('jquery'), NULL);
 wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$options['scale'], 'wpvisr_type'=>$options['color'].$options['shape']));
 ?>
-<h1>WP Vivacity Star Rating Option</h1>
- <form name="form" method="POST" action="" style="margin-top:15px;">
-<div id="tabs">
+<div class="wrap">
+<h1>WP Star Rating Option</h1>
+</div>
+<form name="form" method="POST" action="" style="margin-top:15px;">
+<div id="tabs" class="wpsr-tabs">
   <ul>
-   <li><a href="#tabs-1"><?php _e('General Settings','wp-vivacity-star-rating');?></a></li>
-	<li><a href="#tabs-2"><?php _e('Stars','wp-vivacity-star-rating');?></a></li>
-	<li><a href="#tabs-3" class="button button-primary button-large"><?php _e('Save Settings','wp-vivacity-star-rating');?></a></li>
+   <li><a href="#tabs-1"><?php _e('General Settings','wp-star-rating');?></a></li>
+	<li><a href="#tabs-2"><?php _e('Stars','wp-star-rating');?></a></li>
+	<!-- <li><a href="#tabs-3" class="button button-primary button-large"><?php _e('Save Settings','wp-star-rating');?></a></li> -->
   </ul>
   <div id="tabs-1">
 	<div class="tab_box">
 		<div class="info">
-				<span class="wpvisr_adm_label"><label><h3><?php _e('Enable/Disable','wp-vivacity-star-rating');?></h3></label></span>
+				<span class="wpvisr_adm_label"><label><h3><?php _e('Enable/Disable','wp-star-rating');?></h3></label></span>
 		   	<span><input type="checkbox" class="chkbo _on" name="wpvisr_activated" id="wpvisr_activated" value="<?php echo $options['activated']; ?>" <?php checked($options['activated'], 1, true); ?>></span>
 		</div>
       <div class="wpvisr_hint tooltip-right" data-tooltip="Choose whether you want to enable or disable the plugin"></div>
@@ -114,7 +114,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
   	
   	<div class="tab_box">	
   		<div class="info">
-	  		<span class="wpvisr_adm_label"><label><h3><?php _e('Allow guests to vote','wp-vivacity-star-rating');?></h3></label></span>
+	  		<span class="wpvisr_adm_label"><label><h3><?php _e('Allow guests to vote','wp-star-rating');?></h3></label></span>
 	   	<span><input type="checkbox" class="chkbo _on" name="wpvisr_allow_guest_vote" id="wpvisr_allow_guest_vote" value="<?php echo $options['allow_guest_vote']; ?>" <?php checked($options['allow_guest_vote'], 1, true); ?>></span>
 	   </div>
       <div class="wpvisr_hint tooltip-right" data-tooltip="If this check box is checked then only user will be able to Vote. Guests vote will be tracked by IP instead of UserId."></div>
@@ -122,7 +122,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
     
     <div class="tab_box"> 
       <div class="info">
-      	<span  class="wpvisr_adm_label"><label><h3><?php _e('Show vote count','wp-vivacity-star-rating');?></h3></label></span>
+      	<span  class="wpvisr_adm_label"><label><h3><?php _e('Show vote count','wp-star-rating');?></h3></label></span>
      		<span><input type="checkbox" class="chkbo _on" name="wpvisr_show_vote_count" id="wpvisr_show_vote_count" value="<?php echo $options['show_vote_count']; ?>" <?php checked($options['show_vote_count'], 1, true); ?>></span>
 		</div>
 		<div class="wpvisr_hint tooltip-right" data-tooltip="Check this to show the count of Stars."></div>	
@@ -130,14 +130,14 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
 	
 		<div class="tab_box">
 		<div class="info">
-		<span class="wpvisr_adm_label"><label><h3><?php _e('Where to add rating','wp-vivacity-star-rating');?></h3></label></span>
+		<span class="wpvisr_adm_label"><label><h3><?php _e('Where to add rating','wp-star-rating');?></h3></label></span>
       <?php echo wpvisr_get_post_types_for();  ?>
       </div>
       <div class="wpvisr_hint tooltip-right" data-tooltip="Where do you want to show your rating:- Page, Post and Custom Post."></div>
       </div>
       
       <div class="tab_box">
-      <span class="wpvisr_adm_label"><label><h3><?php _e('Position of the Stars','wp-vivacity-star-rating');?></h3></label></span>
+      <span class="wpvisr_adm_label"><label><h3><?php _e('Position of the Stars','wp-star-rating');?></h3></label></span>
       <p>
       	 <select name="wpvisr_position" id="wpvisr_position" class="wpvisr_admin_input">
                  <option value="before" <?php selected($options['position'], 'before', true); ?>>Before Content</option>
@@ -145,10 +145,11 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
            </select>
       </p>		
 		</div>
+        <p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-star-rating');?>"></p>
   </div>
   <div id="tabs-2">
 	<div class="tab_box"> 
-	 <span  class="wpvisr_adm_label"><label><h3><?php _e('Shape of the Stars','wp-vivacity-star-rating');?></h3></label></span>
+	 <span  class="wpvisr_adm_label"><label><h3><?php _e('Shape of the Stars','wp-star-rating');?></h3></label></span>
                 <p>
                     <select name="wpvisr_shape" id="wpvisr_shape" class="wpvisr_admin_input">
                         <option value="s" <?php selected($options['shape'], 's', true); ?>>Stars</option>
@@ -158,7 +159,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
                 </p>
     </div>            
 	<div class="tab_box">                
-                <span  class="wpvisr_adm_label"><label><h3><?php _e('Color of the Stars','wp-vivacity-star-rating');?></h3></label></span>
+                <span  class="wpvisr_adm_label"><label><h3><?php _e('Color of the Stars','wp-star-rating');?></h3></label></span>
               <p>
                     <select name="wpvisr_color" id="wpvisr_color" class="wpvisr_admin_input">
                         <option value="y" <?php selected($options['color'], 'y', true); ?>>Yellow</option>
@@ -170,7 +171,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
                 </p>
     </div>      
        <div class="tab_box">         
-                <span  class="wpvisr_adm_label"><label><h3><?php _e('Alignment in Respect To Posts','wp-vivacity-star-rating');?></h3></label></span>
+                <span  class="wpvisr_adm_label"><label><h3><?php _e('Alignment in Respect To Posts','wp-star-rating');?></h3></label></span>
                 <p>
                     <select name="wpvisr_alignment" id="wpvisr_alignment" class="wpvisr_admin_input">
                         <option value="center" <?php selected($options['alignment'], 'center', true); ?>>Center</option>
@@ -181,22 +182,24 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
 			</div>
 			<div class="tab_box">
                 <div class="info">
-                <span  class="wpvisr_adm_label"><label><h3><?php _e('Amount of Stars','wp-vivacity-star-rating');?></h3></label></span>
+                <span  class="wpvisr_adm_label"><label><h3><?php _e('Amount of Stars','wp-star-rating');?></h3></label></span>
                 <span><input type="text" size="10" maxlength="200" name="wpvisr_scale" id="wpvisr_scale" value="<?php echo $options['scale']; ?>" class="wpvisr_admin_input"></span>
                 </div>
                 
             	<div class="wpvisr_hint tooltip-right" data-tooltip="Allowed Values are 3-10"></div>
             </div>
+
+            <p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-star-rating');?>"></p>
   </div>
-  <div id="tabs-3">
-	<p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-vivacity-star-rating');?>"></p>
-  </div>
+  <!-- <div id="tabs-3">
+	<p><input type="submit" style="margin-top:10px;" class='button button-primary button-large' value="<?php _e('Save settings','wp-star-rating');?>"></p>
+  </div> -->
 </div>
 </form> 
 <div id="postbox-container-1" class="postbox-container" style="float: right;display:inline-block;width: 280px;margin-right:20px;">
     <div class="postbox ">
         <h3 class="wpvisr_widget_title">
-            <span><?php _e('Live Preview','wp-vivacity-star-rating');?></span>
+            <span><?php _e('Live Preview','wp-star-rating');?></span>
         </h3>
         <div class="inside">         
             <div id="wpvisr_container"><div class="wpvisr_visual_container"><?php echo wpvisr_show_voting(5, 25, $options['show_vote_count']); ?></div></div>
@@ -205,35 +208,36 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
 
 	<div class="postbox ">
         <h3 class="wpvisr_widget_title">
-            <span><?php _e('Reset Votes','wp-vivacity-star-rating');?></span>
+            <span><?php _e('Reset Votes','wp-star-rating');?></span>
         </h3>
         <div class="inside">         
             <form method="post" onsubmit="return confirm('Do you really want to reset votes?')">
-                <?php _e('You can reset votes by pressing button below.','wp-vivacity-star-rating');?><br/>
+                <?php _e('You can reset votes by pressing button below.','wp-star-rating');?><br/>
                 <input type="hidden" name="wpvisr_reset_votes" value="1">
-                <input class="wpvisr_button button button-primary button-small" type="submit" value="<?php _e('Reset votes','wp-vivacity-star-rating');?>">
+                <input class="wpvisr_button button button-primary button-small" type="submit" value="<?php _e('Reset votes','wp-star-rating');?>">
            </form>
         </div>
     </div>
     
     <div class="postbox ">
         <h3 class="wpvisr_widget_title">
-            <span><?php _e('Feedback Form','wp-vivacity-star-rating');?></span>
+            <span><?php _e('Feedback Form','wp-star-rating');?></span>
         </h3>
         <div class="inside">         
             <form method="post" name="feedback_form" id="feedback_form" >
-                <div class="success"><h3><?php _e($success,'wp-vivacity-star-rating');?></h3></div>
+                <div class="success">
+					<?php echo (isset($success))? '<h3>'. _e($success,"wp-star-rating").'</h3>': ''; ?></div>
                 <?php if($success == ''){?>
                 Do you Found a bug? Or you maybe have a new feature request? Please fill this form and let me know!.<br/>
                 <input type="hidden" name="wpvisr_feedback_form" value="1">
                 <?php 
                 $from = get_option('admin_email');
                 ?>
-                <label><?php _e('Ener Your Email ID','wp-vivacity-star-rating');?></label><br/>
+                <label><?php _e('Ener Your Email ID','wp-star-rating');?></label><br/>
                 <input type="text" name="feedback_email" id="feedback_email" size="25" value="<?php echo $from;?>">
-                <label><?php _e('Ener Your Subject','wp-vivacity-star-rating');?></label><br/>
+                <label><?php _e('Ener Your Subject','wp-star-rating');?></label><br/>
                 <input type="text" name="feedback_subject" id="feedback_subject" size="25">
-                <label><?php _e('Ener Your Comments','wp-vivacity-star-rating');?></label><br/>
+                <label><?php _e('Ener Your Comments','wp-star-rating');?></label><br/>
                 <textarea name="feedback_comment" id ="feedback_comment" rows="4" cols="25"></textarea>
                 <input class="wpvisr_button button button-primary button-small feedback" type="submit" value="Submit">
            		 <?php }?>
