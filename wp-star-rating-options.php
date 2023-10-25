@@ -238,7 +238,7 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
                 <label><?php _e('Ener Your Subject','wp-star-rating');?></label><br/>
                 <input type="text" name="feedback_subject" id="feedback_subject" size="25">
                 <label><?php _e('Ener Your Comments','wp-star-rating');?></label><br/>
-                <textarea name="feedback_comment" id ="feedback_comment" rows="4" cols="25"></textarea>
+                <textarea name="feedback_comment" id ="feedback_comment" rows="4" cols="28"></textarea>
                 <input class="wpvisr_button button button-primary button-small feedback" type="submit" value="Submit">
            		 <?php }?>
            </form>
