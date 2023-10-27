@@ -117,6 +117,11 @@ if($theme_options['activated']==1)
 {
 	add_filter('the_content','wpvisr_content_filter',15);
 }
+
+if($theme_options['display_on_archive']==1 && $theme_options['activated']==1)
+{
+    add_filter('the_title', 'display_rating_after_title', 10, 2);
+}
 /* function to display post content with rating */
 function wpvisr_content_filter($content)
 {
@@ -221,6 +226,22 @@ function wpvisr_rating()
         return $results;
     }
 }
+
+
+// Add filter to display rating after post title on archive pages
+function display_rating_after_title($title) {
+    // Check if we are on an archive page
+   // $queried_object_id = get_queried_object_id();
+    if (in_the_loop() && !is_singular()) {
+        // Append the rating after the post title
+        $rating = wpvisr_rating();
+        $title .= $rating;
+    }
+
+    return $title;
+}
+
+
 
 function add_disable_rating_metabox() {
     global $post;
@@ -421,7 +442,7 @@ function wpvisr_save_options() {
     $def_types = 0;
 $theme_options = wpvisr_options();
 $current_json = json_encode($theme_options);
-	if (isset($_POST['wpvisr_shape'])||isset($_POST['wpvisr_color'])||isset($_POST['wpvisr_position'])||isset($_POST['wpvisr_alignment'])||isset($_POST['wpvisr_show_vote_count'])||isset($_POST['wpvisr_activated'])||isset($_POST['wpvisr_allow_guest_vote'])||isset($_POST['scale']))
+	if (isset($_POST['wpvisr_shape'])||isset($_POST['wpvisr_color'])||isset($_POST['wpvisr_position'])||isset($_POST['wpvisr_alignment'])||isset($_POST['wpvisr_show_vote_count'])||isset($_POST['wpvisr_activated'])||isset($_POST['wpvisr_allow_guest_vote'])||isset($_POST['scale']) ||isset($_POST['wpvisr_show_on_archive']))
     	{
 			if(isset($_POST['wpvisr_shape']))
 				{
@@ -549,6 +570,15 @@ $current_json = json_encode($theme_options);
 				else 
 				{
 					$options['show_vote_count'] = 0;
+				}
+
+                if(isset($_POST['wpvisr_show_on_archive']))
+				{
+					$options['display_on_archive'] = 1;
+				}
+				else 
+				{
+					$options['display_on_archive'] = 0;
 				}
 				
 				/*Activated*/

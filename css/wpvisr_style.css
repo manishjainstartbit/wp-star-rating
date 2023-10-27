@@ -12,9 +12,12 @@
     background-repeat: no-repeat;
 }
 #wpvisr_votes {
-    padding-left: .5em;
+    padding-left: 0.5em;
     font-size: 15px;
-    line-height: 17px;
+    line-height: 22px;
+    display: inline;
+    text-decoration: none !important;
+    float: left;
 }
 #wpvisr_container {
     text-align: center;
@@ -42,6 +45,7 @@
 }
 #wpvisr_shapes {
     display: inline;
+    float:left;
 }
 .wpvisr_admin_input {
     width: 160px;

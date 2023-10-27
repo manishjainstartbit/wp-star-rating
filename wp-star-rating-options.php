@@ -135,6 +135,14 @@ wp_localize_script('wpvisr_admin_back', 'wpvisr_ajax_object', array('scale'=>$op
       </div>
       <div class="wpvisr_hint tooltip-right" data-tooltip="Where do you want to show your rating:- Page, Post and Custom Post."></div>
       </div>
+
+      <div class="tab_box">
+		<div class="info">
+		<span class="wpvisr_adm_label"><label><h3><?php _e('Display on Archive page','wp-star-rating');?></h3></label></span>
+        <span><input type="checkbox" class="chkbo _on" name="wpvisr_show_on_archive" id="wpvisr_show_on_archive" value="<?php echo $options['display_on_archive']; ?>" <?php checked($options['display_on_archive'], 1, true); ?>></span>
+      </div>
+      <div class="wpvisr_hint tooltip-right" data-tooltip="Check this to display rating on archive page."></div>
+      </div>
       
       <div class="tab_box">
       <span class="wpvisr_adm_label"><label><h3><?php _e('Position of the Stars','wp-star-rating');?></h3></label></span>
