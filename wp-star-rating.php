@@ -230,9 +230,10 @@ function wpvisr_rating()
 
 // Add filter to display rating after post title on archive pages
 function display_rating_after_title($title) {
-    // Check if we are on an archive page
-   // $queried_object_id = get_queried_object_id();
-    if (in_the_loop() && !is_singular()) {
+    $options = get_option('wpvisr_settings', 'undef');
+    //print_r($options);
+    // Check if we are on an archive page and the post type is 'post'
+    if (in_the_loop() && !is_singular() && is_post_type_active($options, get_post_type())) {
         // Append the rating after the post title
         $rating = wpvisr_rating();
         $title .= $rating;
@@ -241,6 +242,22 @@ function display_rating_after_title($title) {
     return $title;
 }
 
+// Additional function to check if the post type is active
+function is_post_type_active($data, $post_type) {
+    // Decode the JSON data
+    $settings = json_decode($data, true);
+
+    // Check if the post type is active based on the settings
+    if (
+        isset($settings['where_to_show'][$post_type]) &&
+        $settings['where_to_show'][$post_type] == 1 &&
+        $settings['activated'] == 1
+    ) {
+        return true;
+    }
+
+    return false;
+}
 
 
 function add_disable_rating_metabox() {
